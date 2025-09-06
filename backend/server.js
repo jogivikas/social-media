@@ -1,31 +1,37 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import postsRoutes from "./routes/posts.routes.js";
+dotenv.config();
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 
-// MongoDB connection (direct URL, no .env)
-const MONGO_URI = "mongodb://localhost:27017/"; // change DB name if needed
-const PORT = 5000; // you can change the port
+app.use(postsRoutes);
+app.use(cors());
+
+const MONGO_URI = "mongodb://localhost:27017/";
+const PORT = 5000;
 
 mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected");
 
-    // Start server after DB connection
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
-    process.exit(1); // stop app if DB fails
+    process.exit(1);
   });
 
 // Example route
 app.get("/", (req, res) => {
-  res.send("Hello from Express + MongoDB!");
+  res.json({
+    message: "hi vikas",
+  });
 });
