@@ -18,8 +18,6 @@ const UserSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-
-    required: true,
   },
   createdAt: {
     type: Date,
@@ -35,4 +33,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
+
+export default User;
