@@ -6,6 +6,8 @@ import multer from "multer";
 import { uploadProfilePicture } from "../controllers/user.controller.js";
 import { updateUserProfile } from "../controllers/user.controller.js";
 import { getUserAndProfile } from "../controllers/user.controller.js";
+import { updateProfileData } from "../controllers/user.controller.js";
+import { getAllUserProfile } from "../controllers/user.controller.js";
 const router = Router();
 
 const storage = multer.diskStorage({
@@ -27,5 +29,8 @@ router.route("/login").post(login);
 router.route("/user_update").post(updateUserProfile);
 
 router.route("/get_user_and_profile").get(getUserAndProfile);
+
+router.route("/update_profile_data").post(updateProfileData);
+router.route("/user/get_all_users").get(getAllUserProfile);
 
 export default router;
