@@ -38,6 +38,7 @@ router.route("/user_update").post(updateUserProfile);
 router.route("/get_user_and_profile").get(getUserAndProfile);
 
 router.route("/update_profile_data").post(updateProfileData);
+
 router.route("/user/get_all_users").get(getAllUserProfile);
 router.route("/user/download_resume").get(downloadResume);
 
