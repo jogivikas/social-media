@@ -4,6 +4,10 @@ import {
   createPost,
   getAllPosts,
   deletePost,
+  commentPost,
+  increment_likes,
+  get_comment_by_post,
+  delete_comment_of_user,
 } from "../controllers/posts.controller.js";
 import multer from "multer";
 
@@ -24,5 +28,10 @@ router.route("/active").get(activeCheck);
 router.route("/post").post(upload.single("media"), createPost);
 router.route("/posts").get(getAllPosts);
 router.route("/delete_post").post(deletePost);
+router.route("/comment").post(commentPost);
+router.route("/increment_post_likes").post(increment_likes);
+router.route("/get_comments").post(get_comment_by_post);
+
+router.route("/delete_comment").post(delete_comment_of_user);
 
 export default router;
