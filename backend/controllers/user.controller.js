@@ -3,6 +3,34 @@ import User from "../models/user.model.js";
 import Profile from "../models/profiles.model.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+
+const convertUserDataToPDF = async (userData) => {
+  const doc = new PDFDocument();
+  const outputPath = crypto.randomBytes(16).toString("hex") + ".pdf";
+  const stream = fs.createWriteStream("uploads/" + outputPath);
+
+  doc.pipe(stream);
+  doc.image(`uploads/${userData.userId.profilePicture}`, 100, 20, {
+    width: 100,
+  });
+  doc.fontSize(14).text(`Name: ${userData.userId.name}`, 100, 150);
+  doc.fontSize(14).text(`Email: ${userData.userId.email}`, 100, 180);
+  doc.fontSize(14).text(`Username: ${userData.userId.username}`, 100, 210);
+  doc.fontSize(14).text(`Bio: ${userData.bio}`, 100, 240);
+  doc.fontSize(14).text(`Current Position: ${userData.currentPost}`, 100, 270);
+
+  doc.fontSize(14).text("Past Work:");
+  userData.pastWork.forEach((work, index) => {
+    doc.fontSize(14).text(`Company: ${work.company}`, 100, 300 + index * 30);
+    doc.fontSize(14).text(`Position: ${work.position}`, 100, 330 + index * 30);
+    doc.fontSize(14).text(`Years: ${work.years}`, 100, 360 + index * 30);
+  });
+  doc.end();
+
+  return outputPath;
+};
 
 export const register = async (req, res) => {
   try {
@@ -209,4 +237,15 @@ export const getAllUserProfile = async (req, res) => {
       message: err.message,
     });
   }
+};
+
+export const downloadResume = async (req, res) => {
+  const user_id = req.query.id;
+
+  const userProfile = await Profile.findOne({ userId: user_id }).populate(
+    "userId",
+    "name email  username profilePicture"
+  );
+  let outputPath = await convertUserDataToPDF(userProfile);
+  return res.status(200).json({ message: outputPath });
 };
